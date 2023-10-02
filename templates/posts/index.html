@@ -7,5 +7,13 @@
 </head>
 <body>
     <h1>Welcome To My Blog</h1>
+    <h2>These are the latest posts</h2>
+
+    <div>
+        {% for post in posts%}
+        <a href="#">{{post.title}}</a>
+        <p>{{post.body | truncatewords:40}}</p>
+        {%endfor%}
+    </div>
 </body>
 </html>
