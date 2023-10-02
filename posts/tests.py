@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import Post
+from http import HTTPStatus
 
 # Create your tests here.
 
@@ -16,3 +17,23 @@ class PostModelTest(TestCase):
         )
 
         self.assertEqual(str(post),post.title)
+
+
+class HomepageTest(TestCase):
+    def setUp(self) -> None:
+        post1 = Post.objects.create(
+            title = "Test Post Title 1",
+            body = "Test Post Body 1"
+        )
+
+        post2 = Post.objects.create(
+            title = "Test Post Title 2",
+            body = "Test Post Body 2"
+        )
+
+    def test_homepage_returns_correct_response(self):
+        response = self.client.get('/')
+
+        
+        self.assertTemplateUsed(response, 'posts/index.html')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
