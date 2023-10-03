@@ -21,12 +21,12 @@ class PostModelTest(TestCase):
 
 class HomepageTest(TestCase):
     def setUp(self) -> None:
-        post1 = Post.objects.create(
+        self.post1 = Post.objects.create(
             title = "Test Post Title 1",
             body = "Test Post Body 1"
         )
 
-        post2 = Post.objects.create(
+        self.post2 = Post.objects.create(
             title = "Test Post Title 2",
             body = "Test Post Body 2"
         )
@@ -40,5 +40,26 @@ class HomepageTest(TestCase):
     def test_homepage_returns_post_list(self):
         response = self.client.get('/')
 
-        self.assertContains(response, 'Test Post Title 1')
-        self.assertContains(response, 'Test Post Title 2')
+        self.assertContains(response, self.post1.title)
+        self.assertContains(response, self.post2.body)
+
+
+class DetailPageTest(TestCase):
+    def setUp(self) -> None:
+        self.post = Post.objects.create(
+            title = "Test Post Title 3",
+            body = "Test Post Body 3"
+        )
+
+    def test_detail_page_returns_correct_response(self):
+        response = self.client.get(self.post.get_absolute_url())
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, 'posts/detail.html')
+
+
+    def test_detail_page_returns_correct_content(self):
+        response = self.client.get(self.post.get_absolute_url())
+
+        self.assertContains(response,self.post.title)
+        self.assertContains(response,self.post.body)
