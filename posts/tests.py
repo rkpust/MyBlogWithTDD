@@ -1,8 +1,12 @@
 from django.test import TestCase
 from .models import Post
 from http import HTTPStatus
+from model_bakery import baker
+from django.contrib.auth import get_user_model
 
 # Create your tests here.
+
+User = get_user_model()
 
 class PostModelTest(TestCase):
     def test_post_model_exists(self):
@@ -11,24 +15,32 @@ class PostModelTest(TestCase):
         self.assertEqual(posts,0)
 
     def test_string_representation_of_objects(self):
-        post = Post.objects.create(
-            title = "Test Post Title",
-            body = "Test Post Body"
-        )
+        #Create post Manually
+        # post = Post.objects.create(
+        #     title = "Test Post Title",
+        #     body = "Test Post Body"
+        # )
+
+        #Create post by model_bakery
+        post = baker.make(Post)
 
         self.assertEqual(str(post),post.title)
+        self.assertTrue(isinstance(post, Post))
 
 
 class HomepageTest(TestCase):
     def setUp(self) -> None:
+        self.user = baker.make(User)
         self.post1 = Post.objects.create(
             title = "Test Post Title 1",
-            body = "Test Post Body 1"
+            body = "Test Post Body 1",
+            author = self.user
         )
 
         self.post2 = Post.objects.create(
             title = "Test Post Title 2",
-            body = "Test Post Body 2"
+            body = "Test Post Body 2",
+            author = self.user
         )
 
     def test_homepage_returns_correct_response(self):
@@ -46,9 +58,12 @@ class HomepageTest(TestCase):
 
 class DetailPageTest(TestCase):
     def setUp(self) -> None:
+        self.user = baker.make(User)
+
         self.post = Post.objects.create(
             title = "Test Post Title 3",
-            body = "Test Post Body 3"
+            body = "Test Post Body 3",
+            author = self.user
         )
 
     def test_detail_page_returns_correct_response(self):
@@ -63,3 +78,21 @@ class DetailPageTest(TestCase):
 
         self.assertContains(response,self.post.title)
         self.assertContains(response,self.post.body)
+
+    
+class PostAuthorTest(TestCase):
+    def setUp(self) -> None:
+        self.user = baker.make(User)
+
+        self.post = Post.objects.create(
+            title = "Test Post Title 4",
+            body = "Test Post Body 4",
+            author = self.user
+        )
+
+    def test_author_is_instance_of_user_model(self):
+        self.assertTrue(isinstance(self.user, User))
+
+    def test_post_belongs_to_user(self):
+        self.assertTrue(hasattr(self.post, 'author'))
+        self.assertEqual(self.post.author, self.user)

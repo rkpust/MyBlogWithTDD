@@ -1,10 +1,18 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 # Create your models here.
+User = get_user_model()
+
 class Post(models.Model):
     title = models.CharField(max_length=75)
     body = models.TextField()
+    #Add author field
+    # ALTER TABLE "posts_post" ADD COLUMN "author_id" integer DEFAULT 1 NOT NULL CONSTRAINT "posts_post_author_id_fe5487bf_fk_auth_user_id" REFERENCES "auth_user"("id") DEFERRABLE INITIALLY DEFERRED; SET CONSTRAINTS "posts_post_author_id_fe5487bf_fk_auth_user_id" IMMEDIATE;
+    # ALTER TABLE "posts_post" ALTER COLUMN "author_id" DROP DEFAULT;
+    # CREATE INDEX "posts_post_author_id_fe5487bf" ON "posts_post" ("author_id");
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
