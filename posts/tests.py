@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import Post
 from http import HTTPStatus
+from model_bakery import baker
 
 # Create your tests here.
 
@@ -11,12 +12,17 @@ class PostModelTest(TestCase):
         self.assertEqual(posts,0)
 
     def test_string_representation_of_objects(self):
-        post = Post.objects.create(
-            title = "Test Post Title",
-            body = "Test Post Body"
-        )
+        #Create post Manually
+        # post = Post.objects.create(
+        #     title = "Test Post Title",
+        #     body = "Test Post Body"
+        # )
+
+        #Create post by model_bakery
+        post = baker.make(Post)
 
         self.assertEqual(str(post),post.title)
+        self.assertTrue(isinstance(post, Post))
 
 
 class HomepageTest(TestCase):
