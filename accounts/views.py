@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
 from django.urls import reverse
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 def signup_user(request):
@@ -12,7 +13,7 @@ def signup_user(request):
         if form.is_valid():
             form.save()
 
-            return redirect('login-page')
+            return redirect(reverse('login-page'))
 
     context = {
         'form': form,
@@ -23,4 +24,11 @@ def signup_user(request):
 
 
 def login_user(request):
-    return render(request, 'accounts/login.html')
+    form = AuthenticationForm()
+
+    context = {
+        'form': form,
+        'title': 'Login Form'
+    }
+
+    return render(request, 'accounts/login.html', context)
