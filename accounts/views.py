@@ -19,3 +19,8 @@ def signup_user(request):
         'title': 'Registration Form'
     }
     return render(request, 'accounts/register.html', context)
+
+
+
+def login_user(request):
+    return render(request, 'accounts/login.html')
