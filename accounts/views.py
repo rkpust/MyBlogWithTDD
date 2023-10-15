@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def signup_user(request):
@@ -47,3 +47,9 @@ def login_user(request):
     }
 
     return render(request, 'accounts/login.html', context)
+
+
+def logout_user(request):
+    logout(request)
+
+    return redirect(reverse('homepage'))
