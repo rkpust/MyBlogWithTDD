@@ -1,8 +1,10 @@
 from django.test import TestCase
-from .models import Post
+from django.urls import reverse
 from http import HTTPStatus
 from model_bakery import baker
 from django.contrib.auth import get_user_model
+from .models import Post
+from .forms import PostCreationForm
 
 # Create your tests here.
 
@@ -96,3 +98,19 @@ class PostAuthorTest(TestCase):
     def test_post_belongs_to_user(self):
         self.assertTrue(hasattr(self.post, 'author'))
         self.assertEqual(self.post.author, self.user)
+
+class PostCreationTest(TestCase):
+    def setUp(self):
+        self.url = reverse('create_post')
+        self.template_name = 'posts/create-post.html'
+        self.form_class = PostCreationForm
+
+    def test_post_creation_page_exists(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, self.template_name)
+
+        form = response.context.get('form', None)
+
+        self.assertIsInstance(form, self.form_class)
