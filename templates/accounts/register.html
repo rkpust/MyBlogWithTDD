@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1 class="text-center">Create Your Account Today</h1>
+<hr>
+<form action="" style="width: 400px; margin: 0 auto;" method="POST">
+    {% csrf_token %}
+    {{form | crispy}}
+    <br>
+    <input type="submit" class="btn btn-success" value="Sign Up">
+</form>
+{%endblock content%}
