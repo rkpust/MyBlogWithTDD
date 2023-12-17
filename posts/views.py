@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Post
 from .forms import PostCreationForm
@@ -18,6 +19,8 @@ def PostDetail(request, id):
         }
     return render(request, 'posts/detail.html', context)
 
+
+@login_required
 def create_post(request):
     form = PostCreationForm()
 
