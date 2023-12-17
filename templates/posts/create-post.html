@@ -2,12 +2,13 @@
 
 {% block content %}
 <div>
-    <h1>Create New Post</h1>
-    <div>
+    <h1 class="text-center">Create New Post</h1>
+    <hr>
+    <div class="text-center">
         <form action="" method="post">
             {% csrf_token %}
             {{form.as_p}}
-            <input type="submit" value="Create">
+            <input type="submit" class="btn btn-success" value="Create">
         </form>
     </div>
 </div>
