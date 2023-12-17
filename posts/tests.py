@@ -155,4 +155,5 @@ class PostCreationTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertRedirects(response, expected_url='accounts/login/?next=/create_post/')
+        self.assertRedirects(response, expected_url='/accounts/login/?next=/create_post/')
+        
