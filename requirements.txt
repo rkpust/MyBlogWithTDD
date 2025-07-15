@@ -3,3 +3,4 @@ python-decouple==3.8
 psycopg2==2.9.10
 django-crispy-forms==2.4
 crispy-bootstrap4==2025.6
+model-bakery==1.20.5
